@@ -1,0 +1,15 @@
+import React from 'react';
+
+export default function AboutPage() {
+  return (
+    <>
+      <div className="main-content">
+        <h2>Portfolio Landing Page</h2>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum
+          eligendi veniam eius rem, eos sunt, velit dignissimos aliquid harum
+        </p>
+      </div>
+    </>
+  );
+}
