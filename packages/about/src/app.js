@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Router } from 'react-router-dom';
 
-export default function AboutPage() {
+import Landing from './components/landing.component';
+
+export default ({ history }) => {
+  const [location, setLocation] = useState(history.location);
+
+  useEffect(() => {
+    const unlisten = history.listen((update) => setLocation(update.location));
+    return unlisten;
+  }, [history]);
   return (
     <>
-      <div className="main-content">
-        <h2>About Me</h2>
-        <p>My bio goes here. jaosijfolanl</p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum
-          eligendi veniam eius rem, eos sunt, velit dignissimos aliquid harum
-        </p>
-      </div>
+      <Router location={location} navigator={history}>
+        <Routes>
+          <Route path="/about" element=<Landing /> />
+        </Routes>
+      </Router>
     </>
   );
-}
+};

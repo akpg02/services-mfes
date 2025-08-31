@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Router } from 'react-router-dom';
 
-export default function RecommendationPage() {
-  return (
-    <div>
-      <h2>Recommendations</h2>
-      <ul>
-        <li>"Customers also bought/viewed" carousels</li>
-        <li>Personalized "For you" sections</li>
-      </ul>
-    </div>
+import Landing from './components/landing.component';
+
+export default ({ history }) => {
+  const [location, setLocation] = useState(history.location);
+  useEffect(
+    () => history.listen(({ location }) => setLocation(location)),
+    [history]
   );
-}
+
+  return (
+    <>
+      <Router location={location} navigator={history}>
+        <Routes>
+          <Route index element={<Landing />} />
+          <Route path="*" element={<div>Page not found</div>} />
+        </Routes>
+      </Router>
+    </>
+  );
+};

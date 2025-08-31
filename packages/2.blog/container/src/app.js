@@ -1,68 +1,33 @@
-import React, { Suspense, lazy } from 'react';
-import { Routes, Route, Link, Outlet } from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
+import { Router, Route, Routes } from 'react-router-dom';
 
-const Author = lazy(() => import('author/AuthorApp'));
-const Categories = lazy(() => import('categories/CategoriesApp'));
-const Comments = lazy(() => import('comments/CommentsApp'));
-const Newsletters = lazy(() => import('newsletters/NewslettersApp'));
-const Post = lazy(() => import('post/PostApp'));
-const Posts = lazy(() => import('posts/PostsApp'));
-const Related = lazy(() => import('related/RelatedApp'));
-const Search = lazy(() => import('search/SearchApp'));
-const Social = lazy(() => import('social/SocialApp'));
+const MarketingLazy = lazy(() => import('./components/marketing.app'));
+const AuthorsLazy = lazy(() => import('./components/authors.app'));
+const DashboardLazy = lazy(() => import('./components/dashboard.app'));
+const PostsLazy = lazy(() => import('./components/posts.app'));
+const CommentsLazy = lazy(() => import('./components/comments.app'));
+const NewslettersLazy = lazy(() => import('./components/newsletters.app'));
+const RelatedLazy = lazy(() => import('./components/related.app'));
+const SearchLazy = lazy(() => import('./components/search.app'));
+const SocialLazy = lazy(() => import('./components/social.app'));
 
-function BlogLayout() {
-  const prefix = window.location.pathname.startsWith('/blog') ? '/blog' : '';
+export default function ({ history }) {
   return (
-    <>
-      <nav style={{ padding: 10, borderBottom: '1px solid #ccc' }}>
-        <Link to={`${prefix}/categories`} style={{ marginRight: 10 }}>
-          Categories
-        </Link>
-        <Link to={`${prefix}/comments`} style={{ marginRight: 10 }}>
-          Comments
-        </Link>
-        <Link to={`${prefix}/post`} style={{ marginRight: 10 }}>
-          Post
-        </Link>
-        <Link to={`${prefix}/posts`} style={{ marginRight: 10 }}>
-          Posts
-        </Link>
-        <Link to={`${prefix}/related`} style={{ marginRight: 10 }}>
-          Related
-        </Link>
-        <Link to={`${prefix}/search`} style={{ marginRight: 10 }}>
-          Search
-        </Link>
-        <Link to={`${prefix}/social`} style={{ marginRight: 10 }}>
-          Social
-        </Link>
-        <Link to={`${prefix}/newsletters`}>Newsletters</Link>
-      </nav>
-      <Outlet />
-    </>
-  );
-}
-export default function App() {
-  return (
-    <>
-      <Suspense fallback={<div>Loading Blog…</div>}>
+    <Router location={history.location} navigator={history}>
+      <Suspense fallback={<div>Loading…</div>}>
         <Routes>
-          <Route path="/*" element={<BlogLayout />}>
-            <Route index element={<div>Blog landing page</div>} />
-            <Route path="author" element={<Author />} />
-            <Route path="categories" element={<Categories />} />
-            <Route path="comments" element={<Comments />} />
-            <Route path="newsletters" element={<Newsletters />} />
-            <Route path="post" element={<Post />} />
-            <Route path="posts" element={<Posts />} />
-            <Route path="related" element={<Related />} />
-            <Route path="search" element={<Search />} />
-            <Route path="social" element={<Social />} />
-          </Route>
-          <Route path="*" element={<h2>404: Page Not Found!</h2>} />
+          <Route index element={<MarketingLazy />} />
+          <Route path="authors/*" element={<AuthorsLazy />} />
+          <Route path="dashboard/*" element={<DashboardLazy />} />
+          <Route path="posts/*" element={<PostsLazy />} />
+          <Route path="comments/*" element={<CommentsLazy />} />
+          <Route path="newsletters/*" element={<NewslettersLazy />} />
+          <Route path="related/*" element={<RelatedLazy />} />
+          <Route path="search/*" element={<SearchLazy />} />
+          <Route path="social/*" element={<SocialLazy />} />
+          <Route path="*" element={<div>Not Found</div>} />
         </Routes>
       </Suspense>
-    </>
+    </Router>
   );
 }

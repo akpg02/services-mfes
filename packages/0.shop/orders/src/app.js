@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Router } from 'react-router-dom';
 
-export default function OrdersPage() {
-  return (
-    <div>
-      <h2>Order History</h2>
-      <ul>
-        <li>List of past orders, statuses, invoices</li>
-        <li>'Reorder' action</li>
-      </ul>
-    </div>
+import Landing from './components/landing.component';
+
+export default ({ history }) => {
+  const [location, setLocation] = useState(history.location);
+  useEffect(
+    () => history.listen(({ location }) => setLocation(location)),
+    [history]
   );
-}
+
+  return (
+    <>
+      <Router location={location} navigator={history}>
+        <Routes>
+          <Route index element={<Landing />} />
+          <Route path="*" element={<div>Page not found</div>} />
+        </Routes>
+      </Router>
+    </>
+  );
+};

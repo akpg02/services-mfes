@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Router } from 'react-router-dom';
 
-export default function ChallengesPage() {
+import Landing from './components/landing.component';
+
+export default ({ history }) => {
+  const [location, setLocation] = useState(history.location);
+
+  useEffect(() => {
+    const unlisten = history.listen((update) => setLocation(update.location));
+    return unlisten;
+  }, [history]);
   return (
-    <div>
-      <h2>Coding Challenges</h2>
-      <p>
-        Note: Build a UI for each coding challenge. Solve and code each
-        challenge. For example: palindrome, fizzbuzz, etc.
-      </p>
-    </div>
+    <>
+      <Router location={location} navigator={history}>
+        <Routes>
+          <Route path="/challenges" element=<Landing /> />
+        </Routes>
+      </Router>
+    </>
   );
-}
+};

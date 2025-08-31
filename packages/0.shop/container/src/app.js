@@ -1,112 +1,41 @@
-import React, { lazy, Suspense, useEffect } from 'react';
-import {
-  Routes,
-  Route,
-  Link,
-  Navigate,
-  Outlet,
-  useNavigate,
-} from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
+import { Router, Route, Routes } from 'react-router-dom';
 
-const ProductsPage = lazy(() => import('products/ProductsApp'));
-const CartPage = lazy(() => import('cart/CartApp'));
-const DashboardPage = lazy(() => import('dashboard/DashboardApp'));
-const ReviewsPage = lazy(() => import('reviews/ReviewsApp'));
-const ChatPage = lazy(() => import('chat/ChatApp'));
-const CheckoutPage = lazy(() => import('checkout/CheckoutApp'));
-const OrdersPage = lazy(() => import('orders/OrdersApp'));
-const ProductPage = lazy(() => import('product/ProductApp'));
-const PaymentsPage = lazy(() => import('payments/PaymentsApp'));
-const SearchPage = lazy(() => import('search/SearchApp'));
-const WishlistPage = lazy(() => import('wishlist/WishlistApp'));
-const RecommendationsPage = lazy(() =>
-  import('recommendations/RecommendationsApp')
+const MarketingLazy = lazy(() => import('./components/marketing.app'));
+const ProductsLazy = lazy(() => import('./components/products.app'));
+const CartsLazy = lazy(() => import('./components/carts.app'));
+const ChatsLazy = lazy(() => import('./components/chats.app'));
+const CheckoutLazy = lazy(() => import('./components/checkout.app'));
+const DashboardLazy = lazy(() => import('./components/dashboard.app'));
+const OrdersLazy = lazy(() => import('./components/orders.app'));
+const PaymentsLazy = lazy(() => import('./components/payments.app'));
+const ReviewsLazy = lazy(() => import('./components/reviews.app.js'));
+const SearchLazy = lazy(() => import('./components/search.app.js'));
+const WishlistsLazy = lazy(() => import('./components/wishlists.app.js'));
+const RecommendationsLazy = lazy(() =>
+  import('./components/recommendations.app.js')
 );
 
-function ShopLayout() {
-  const prefix = window.location.pathname.startsWith('/shop') ? '/shop' : '';
+export default function ShopApp({ history }) {
   return (
-    <>
-      <nav style={{ padding: 10, borderBottom: '1px solid #ccc' }}>
-        <Link to={`${prefix}/products`} style={{ marginRight: 10 }}>
-          Products
-        </Link>
-        <Link to={`${prefix}/cart`} style={{ marginRight: 10 }}>
-          Cart
-        </Link>
-        <Link to={`${prefix}/chat`} style={{ marginRight: 10 }}>
-          Chat
-        </Link>
-        <Link to={`${prefix}/checkout`} style={{ marginRight: 10 }}>
-          Checkout
-        </Link>
-        <Link to={`${prefix}/orders`} style={{ marginRight: 10 }}>
-          Orders
-        </Link>
-        <Link to={`${prefix}/payments`} style={{ marginRight: 10 }}>
-          Payments
-        </Link>
-        <Link to={`${prefix}/product`} style={{ marginRight: 10 }}>
-          Product
-        </Link>
-        <Link to={`${prefix}/recommendations`} style={{ marginRight: 10 }}>
-          Recommendations
-        </Link>
-        <Link to={`${prefix}/search`} style={{ marginRight: 10 }}>
-          Search
-        </Link>
-        <Link to={`${prefix}/wishlist`} style={{ marginRight: 10 }}>
-          Wishlist
-        </Link>
-        <Link to={`${prefix}/dashboard`} style={{ marginRight: 10 }}>
-          Dashboard
-        </Link>
-        <Link to={`${prefix}/reviews`}>Reviews</Link>
-      </nav>
-      <Outlet />
-    </>
-  );
-}
-
-/*
-isSignedIn ? (
- <DashboardPage />) : (
-<Navigate to="/auth/login" replace />) */
-
-export default function ShopPage({ isSignedIn }) {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isSignedIn) {
-      navigate('/dashboard');
-    }
-  }, [isSignedIn, navigate]);
-
-  return (
-    <>
-      <Suspense fallback={<div>Loading...Container</div>}>
+    <Router location={history.location} navigator={history}>
+      <Suspense fallback={<div>Loading…</div>}>
         <Routes>
-          <Route path="/*" element={<ShopLayout />}>
-            <Route
-              index
-              element={<div>This will be the shop landing page.</div>}
-            />
-            <Route path="products" element={<ProductsPage />} />
-            <Route path="cart" element={<CartPage />} />
-            <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="reviews" element={<ReviewsPage />} />
-            <Route path="chat" element={<ChatPage />} />
-            <Route path="checkout" element={<CheckoutPage />} />
-            <Route path="orders" element={<OrdersPage />} />
-            <Route path="product" element={<ProductPage />} />
-            <Route path="payments" element={<PaymentsPage />} />
-            <Route path="recommendations" element={<RecommendationsPage />} />
-            <Route path="search" element={<SearchPage />} />
-            <Route path="wishlist" element={<WishlistPage />} />
-          </Route>
-          <Route path="*" element={<h2>Shop page not found</h2>} />
+          <Route index element={<MarketingLazy />} />
+          <Route path="products/*" element={<ProductsLazy />} />
+          <Route path="carts/*" element={<CartsLazy />} />
+          <Route path="chats/*" element={<ChatsLazy />} />
+          <Route path="checkout/*" element={<CheckoutLazy />} />
+          <Route path="dashboard/*" element={<DashboardLazy />} />
+          <Route path="orders/*" element={<OrdersLazy />} />
+          <Route path="payments/*" element={<PaymentsLazy />} />
+          <Route path="recommendations/*" element={<RecommendationsLazy />} />
+          <Route path="reviews/*" element={<ReviewsLazy />} />
+          <Route path="search/*" element={<SearchLazy />} />
+          <Route path="wishlists/*" element={<WishlistsLazy />} />
+          <Route path="*" element={<div>Not Found</div>} />
         </Routes>
       </Suspense>
-    </>
+    </Router>
   );
 }

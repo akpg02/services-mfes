@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Router } from 'react-router-dom';
 
-export default function ProductsPage() {
+import Landing from './components/landing.component';
+
+export default function ProductsApp({ history }) {
+  const [location, setLocation] = useState(history.location);
+  useEffect(
+    () => history.listen(({ location }) => setLocation(location)),
+    [history]
+  );
+
   return (
-    <div>
-      <h2>Products</h2>
-      <ul>
-        <li>Category listings, facet listing (price, brand, rating)</li>
-        <li>Pagination or infinite scroll</li>
-      </ul>
-    </div>
+    <Router location={location} navigator={history}>
+      <Routes>
+        <Route path="/*" element={<Landing />} />
+        <Route path="*" element={<div>Page not found</div>} />
+      </Routes>
+    </Router>
   );
 }

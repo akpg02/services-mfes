@@ -1,48 +1,58 @@
-import React, { Suspense, lazy, useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { lazy, Suspense, useState } from 'react';
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  Navigate,
+  useNavigate,
+} from 'react-router-dom';
 
-const AuthApp = lazy(() => import('auth/AuthApp'));
-const AboutApp = lazy(() => import('about/AboutApp'));
-const ChallengesApp = lazy(() => import('challenges/ChallengesApp'));
-const ProjectsApp = lazy(() => import('projects/ProjectsApp'));
-const MarketingApp = lazy(() => import('marketing/MarketingApp'));
-const ContactApp = lazy(() => import('contact/ContactApp'));
-const ShopApp = lazy(() => import('shop/ShopApp'));
-const BlogApp = lazy(() => import('blog/BlogApp'));
-const CalendarApp = lazy(() => import('calendar/CalendarApp'));
+const AuthLazy = lazy(() => import('./components/auth.app'));
+const MarketingLazy = lazy(() => import('./components/marketing.app'));
+const AboutLazy = lazy(() => import('./components/about.app'));
+const ChallengesLazy = lazy(() => import('./components/challenges.app'));
+const ContactLazy = lazy(() => import('./components/contact.app'));
+const ProjectsLazy = lazy(() => import('./components/projects.app'));
+const ShopLazy = lazy(() => import('./components/shop.app'));
+const CalendarLazy = lazy(() => import('./components/calendar.app'));
+const BlogLazy = lazy(() => import('./components/blog.app'));
+const QuotesLazy = lazy(() => import('./components/quotes.app'));
 
-export default function App() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+const App = () => {
+  const [isSignedIn, setisSignedIn] = useState(false);
+  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    setIsSignedIn(false);
+  const handleSignin = () => {
+    setisSignedIn(true);
+    navigate('/');
   };
 
   return (
     <>
-      <Suspense fallback={<div>Loading root...</div>}>
+      <Suspense fallback={<div>Loading....</div>}>
         <Routes>
-          <Route index element={<MarketingApp />} />
           <Route
-            path="auth/*"
-            element={
-              <AuthApp
-                onSignIn={() => setIsSignedIn(true)}
-                isSignedIn={isSignedIn}
-                handleLogout={handleLogout}
-              />
-            }
+            path="/auth/*"
+            element={<AuthLazy onSignin={handleSignin} />}
           />
-          <Route path="about/*" element={<AboutApp />} />
-          <Route path="challenges/*" element={<ChallengesApp />} />
-          <Route path="projects/*" element={<ProjectsApp />} />
-          <Route path="contact/*" element={<ContactApp />} />
-          <Route path="shop/*" element={<ShopApp />} />
-          <Route path="blog/*" element={<BlogApp />} />
-          <Route path="calendar/*" element={<CalendarApp />} />
+          <Route path="/about/*" element={<AboutLazy />} />
+          <Route path="/challenges/*" element={<ChallengesLazy />} />
+          <Route path="/contact/*" element={<ContactLazy />} />
+          <Route path="/projects/*" element={<ProjectsLazy />} />
+          <Route path="/shop/*" element={<ShopLazy />} />
+          <Route path="/calendars/*" element={<CalendarLazy />} />
+          <Route path="/blogs/*" element={<BlogLazy />} />
+          <Route path="/quotes/*" element={<QuotesLazy />} />
+          <Route path="/*" element={<MarketingLazy />} />
+          <Route path="*" element={<div>Page not found at root</div>} />
         </Routes>
       </Suspense>
     </>
   );
-}
+};
+
+export default () => (
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);

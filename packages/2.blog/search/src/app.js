@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Router } from 'react-router-dom';
 
-export default function AboutPage() {
-  return (
-    <div>
-      <h2>Search & Filter</h2>
-      <ul>
-        <li>Site-wide search (typeahead suggestion)</li>
-        <li>Search results page with sorting/filtering controls</li>
-      </ul>
-    </div>
+import Landing from './components/landing.component';
+
+export default ({ history }) => {
+  const [location, setLocation] = useState(history.location);
+  useEffect(
+    () => history.listen(({ location }) => setLocation(location)),
+    [history]
   );
-}
+
+  return (
+    <>
+      <Router location={location} navigator={history}>
+        <Routes>
+          <Route index element={<Landing />} />
+          <Route path="*" element={<div>Page not found</div>} />
+        </Routes>
+      </Router>
+    </>
+  );
+};

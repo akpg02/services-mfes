@@ -10,7 +10,6 @@ certs/**
 node_modules/
 dist/
 logs/
-config/
 
 # Ignore compiled output
 /build/

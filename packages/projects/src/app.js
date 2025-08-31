@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Router } from 'react-router-dom';
 
-export default function ProjectsPage() {
+import Landing from './components/landing.component';
+
+export default ({ history }) => {
+  const [location, setLocation] = useState(history.location);
+
+  useEffect(() => {
+    const unlisten = history.listen((update) => setLocation(update.location));
+    return unlisten;
+  }, [history]);
   return (
-    <div>
-      <h2>Projects</h2>
-      <p>Your project showcase goes here.</p>
-      <li></li>
-    </div>
+    <>
+      <Router location={location} navigator={history}>
+        <Routes>
+          <Route path="/projects" element={<Landing />} />
+        </Routes>
+      </Router>
+    </>
   );
-}
+};
