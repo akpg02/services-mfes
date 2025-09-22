@@ -17,7 +17,7 @@ Certain sections, particularly, the projects section interacts with the services
 
 #### In Development:
 
-- Run all microservices at once:
+- Run all microfrontends at once:
   At root, execute the following command `npm run dev`
 - Run individual microfrontends: Refer to each microfrontend README file for further instructions.
 
