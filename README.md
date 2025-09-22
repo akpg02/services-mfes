@@ -15,7 +15,11 @@ Certain sections, particularly, the projects section interacts with the services
 
 ## Running the Project
 
-Refer to each microfrontend README file for further instructions.
+#### In Development:
+
+- Run all microservices at once:
+  At root, execute the following command `npm run dev`
+- Run individual microfrontends: Refer to each microfrontend README file for further instructions.
 
 ## CI/CD
 
